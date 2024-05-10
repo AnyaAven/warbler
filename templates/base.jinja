@@ -20,7 +20,59 @@
 
 <body class="{% block body_class %}{% endblock %}">
 
-{% include "_nav.jinja"%}
+<nav class="navbar navbar-expand">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">
+        <img src="/static/images/warbler-logo.png" alt="logo">
+        <span>Warbler</span>
+      </a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+
+      {% block searchbox %}
+        <li>
+          <form class="navbar-form navbar-end" action="/users">
+            <input
+                name="q"
+                class="form-control"
+                placeholder="Search Warbler"
+                aria-label="Search"
+                id="search">
+            <button class="btn btn-default">
+              <span class="bi bi-search"></span>
+            </button>
+          </form>
+        </li>
+      {% endblock %}
+
+      {% if not g.user %}
+        <li><a href="/signup">Sign up</a></li>
+        <li><a href="/login">Log in</a></li>
+      {% else %}
+        <li>
+          <a href="/users/{{ g.user.id }}">
+            <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
+          </a>
+        </li>
+        <li><a href="/messages/new">New Message</a></li>
+        <li>
+          <form>
+            {{ g.csrf_form.hidden_tag() }}
+            <button class="btn btn-danger btn-sm"
+                    formaction="/logout"
+                    formmethod="POST">
+              Logout
+            </button>
+          </form>
+        </li>
+      {% endif %}
+
+    </ul>
+  </div>
+</nav>
 
 <div class="container">
 
