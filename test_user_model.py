@@ -5,6 +5,8 @@ from unittest import TestCase
 
 from app import app
 from models import db, dbx, User
+from flask_bcrypt import Bcrypt
+from sqlalchemy.exc import IntegrityError
 
 # To run the tests, you must provide a "test database", since these tests
 # delete & recreate the tables & data. In your shell:
@@ -94,10 +96,44 @@ class UserModelTestCase(TestCase):
 
     def test_signup(self):
 
-        u3 = User.signup("user3", "user3@gmail.com", "password3")
+        u3 = User.signup("user3", "user3@gmail.com", "password3", None)
         db.session.commit()
+
+        u3_is_auth = User.authenticate(u3.username,"password3" )
 
         self.assertEqual(u3.username, "user3")
         self.assertEqual(u3.email, "user3@gmail.com")
         self.assertNotEqual(u3.password, "password3")
+        self.assertIsNot(u3_is_auth, False)
         # TODO: ask how to test hashed_pwd
+
+    def test_signup_failure(self):
+        u3 = User.signup("user3", "user3@gmail.com", "password3", None)
+        db.session.commit()
+
+        # Cannot have a duplicate username
+        with self.assertRaises(IntegrityError):
+            User.signup("user3", "unique", "password3", None)
+            db.session.commit()
+
+        db.session.rollback()
+
+        db.session.begin()
+
+        # Cannot have a duplicate email
+        with self.assertRaises(IntegrityError):
+            User.signup("unique1", "user3@gmail.com", "password3", None)
+            db.session.commit()
+
+        db.session.rollback()
+
+        db.session.begin()
+
+        # Cannot have duplicate email and username
+        with self.assertRaises(IntegrityError):
+            User.signup("user3", "user3@gmail.com", "password3", None)
+            db.session.commit()
+
+
+
+
