@@ -7,7 +7,7 @@
         <img src="/static/images/warbler-logo.png" alt="logo">
         <span>Warbler</span>
       </a>
-    <button class="navbar-toggler bg-primary"
+    <button class="navbar-toggler bg-secondary"
         type="button" data-bs-toggle="collapse"
         data-bs-target="#navbarColor01"
         aria-controls="navbarColor01"
@@ -30,12 +30,7 @@
         {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/users/{{ g.user.id }}">
-                    <img class="img-fluid" src="{{ g.user.image_url }}" alt="{{ g.user.username }}" >
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/users">
-                    Warbler Users
+                    <img class="Profile-pic img-fluid" src="{{ g.user.image_url }}" alt="{{ g.user.username }}" >
                 </a>
             </li>
             <li class="nav-item">
@@ -43,7 +38,8 @@
                     New Message
                 </a>
             </li>
-            <li class="nav-item">
+
+            <li class="nav-item mb-2">
                 <form>
                     {{ g.csrf_form.hidden_tag() }}
                     <button class="btn btn-danger btn-sm"
@@ -69,10 +65,10 @@
                 id="search">
 
             <button class="btn btn-default my-2 my-sm-0">
-
+                {# <span class="bi bi-search"></span>BS: Why isnt this icon appearing inside the search bar?#}
             </button>
 
-            <span class="bi bi-search"></span> {# BS: Why isnt this icon appearing inside the search bar? #}
+
         </form>
       {% endblock %}
     </div>
