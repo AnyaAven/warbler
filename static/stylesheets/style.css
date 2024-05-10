@@ -552,3 +552,9 @@ p.card-bio {
 .Background-swirl {
   background-image: url('/static/images/liquid-marble-blue-white-background.jpg');
 }
+
+.Profile-pic {
+  max-width: 30px;
+  max-height: 30px;
+  border-radius: 50%;
+}
